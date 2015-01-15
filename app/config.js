@@ -6,6 +6,9 @@ mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
+
+var Link, User;
+
 db.once('open', function(){
 
   var urlSchema = mongoose.Schema({
@@ -18,7 +21,7 @@ db.once('open', function(){
     updatedAt: {type: Date, default: Date.now}
   })
 
-  var urls = mongoose.model('urls', urlSchema);
+  Link = mongoose.model('urls', urlSchema);
 
   var userSchema = mongoose.Schema({
     username: String,
@@ -27,10 +30,12 @@ db.once('open', function(){
     updatedAt: {type: Date, default: Date.now}
   })
 
-  var users = mongoose.model('users', userSchema);
+  User = mongoose.model('users', userSchema);
 
 });
 
-// module.exports = db;
-
-
+module.exports = {
+  db: db,
+  Link: Link,
+  User: User
+}
