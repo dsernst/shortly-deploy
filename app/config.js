@@ -7,35 +7,31 @@ var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 
-var Link, User;
+var urlSchema, userSchema;
 
-db.once('open', function(){
+// db.once('open', function(cb){
 
-  var urlSchema = mongoose.Schema({
+  urlSchema = mongoose.Schema({
     url: String,
     base_url: String,
     code: String,
     title: String,
-    visits: Number,
+    visits: {type: Number, default: 0},
     createdAt: {type: Date, default: Date.now},
     updatedAt: {type: Date, default: Date.now}
   })
 
-  Link = mongoose.model('urls', urlSchema);
-
-  var userSchema = mongoose.Schema({
+  userSchema = mongoose.Schema({
     username: String,
     password: String,
     createdAt: {type: Date, default: Date.now},
     updatedAt: {type: Date, default: Date.now}
   })
 
-  User = mongoose.model('users', userSchema);
-
-});
+// });
 
 module.exports = {
   db: db,
-  Link: Link,
-  User: User
+  urlSchema: urlSchema,
+  userSchema: userSchema
 }
