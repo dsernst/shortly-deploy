@@ -9,15 +9,16 @@ userSchema.methods.comparePassword = function(attemptedPassword, callback) {
   });
 };
 
-userSchema.methods.hashPassword = function(){
+userSchema.methods.hashPassword = function(next){
   var cipher = Promise.promisify(bcrypt.hash);
-  return cipher(this.get('password'), null, null).bind(this)
-    .then(function(hash) {
+  cipher(this.get('password'), null, null).bind(this)
+  .then(function(hash) {
       this.set('password', hash);
-    });
+  })
+  .then(next);
 };
 
-userSchema.pre('save', this.hashPassword);
+userSchema.pre('save', function(next){this.hashPassword(next)});
 
 var User = mongoose.model('users', userSchema);
 
