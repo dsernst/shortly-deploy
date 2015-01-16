@@ -1,34 +1,29 @@
 // var path = require('path');
 var mongoose = require('mongoose')
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(process.env.DB_URL);
 
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 
-var urlSchema, userSchema;
+var urlSchema = mongoose.Schema({
+  url: String,
+  base_url: String,
+  code: String,
+  title: String,
+  visits: {type: Number, default: 0},
+  createdAt: {type: Date, default: Date.now},
+  updatedAt: {type: Date, default: Date.now}
+})
 
-// db.once('open', function(cb){
+var userSchema = mongoose.Schema({
+  username: String,
+  password: String,
+  createdAt: {type: Date, default: Date.now},
+  updatedAt: {type: Date, default: Date.now}
+})
 
-  urlSchema = mongoose.Schema({
-    url: String,
-    base_url: String,
-    code: String,
-    title: String,
-    visits: {type: Number, default: 0},
-    createdAt: {type: Date, default: Date.now},
-    updatedAt: {type: Date, default: Date.now}
-  })
-
-  userSchema = mongoose.Schema({
-    username: String,
-    password: String,
-    createdAt: {type: Date, default: Date.now},
-    updatedAt: {type: Date, default: Date.now}
-  })
-
-// });
 
 module.exports = {
   db: db,
